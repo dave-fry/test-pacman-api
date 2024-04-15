@@ -9,4 +9,4 @@ jobs:
         azureSubscription: 'Playground'
         appType: 'webApp'
         WebAppName: 'app-pacman-api'
-        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
