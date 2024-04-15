@@ -3,11 +3,10 @@ jobs:
   displayName: 'Deploy to Azure Web App'
 
   steps:
-    - 
-  - task: AzureRmWebAppDeployment@4
-    inputs:
-      ConnectionType: 'AzureRM'
-      azureSubscription: 'Playground'
-      appType: 'webApp'
-      WebAppName: 'app-pacman-api'
-      packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Playground'
+        appType: 'webApp'
+        WebAppName: 'app-pacman-api'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
