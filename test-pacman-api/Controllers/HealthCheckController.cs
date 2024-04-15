@@ -9,7 +9,7 @@ namespace test_pacman_api.Controllers
         [HttpGet("ping")]
         public string Ping()
         {
-            return "pong";
+            return "pong!";
         }
     }
 }
