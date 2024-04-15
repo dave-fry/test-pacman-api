@@ -1,0 +1,223 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_app_pacman_api_name": {
+            "defaultValue": "app-pacman-api",
+            "type": "String"
+        },
+        "serverfarms_asp_pacman_api_externalid": {
+            "defaultValue": "/subscriptions/dbcbf8f4-d608-41f7-9003-d157880d4b31/resourceGroups/rg-david-fry/providers/Microsoft.Web/serverfarms/asp-pacman-api",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2023-01-01",
+            "name": "[parameters('sites_app_pacman_api_name')]",
+            "location": "UK West",
+            "kind": "app",
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_app_pacman_api_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_app_pacman_api_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_asp_pacman_api_externalid')]",
+                "reserved": false,
+                "isXenon": false,
+                "hyperV": false,
+                "vnetRouteAllEnabled": false,
+                "vnetImagePullEnabled": false,
+                "vnetContentShareEnabled": false,
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "customDomainVerificationId": "9DB2FF15141BCFBAA20B646386250BDD04CADFCD6CE09E0D51B32080B92A0775",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": true,
+                "redundancyMode": "None",
+                "publicNetworkAccess": "Enabled",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/ftp')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/scm')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "allow": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/web')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v8.0",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "remoteDebuggingVersion": "VS2019",
+                "httpLoggingEnabled": false,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$app-pacman-api",
+                "scmType": "VSTSRM",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "publicNetworkAccess": "Enabled",
+                "localMySqlEnabled": false,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {}
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/7a8691977d2d45eaae8ed69f0c4f19cc')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"6ae477c772f8634dce789a7042e53a27ec0c2271\",\"buildId\":\"181082\",\"releaseId\":\"149\",\"buildNumber\":\"20240415.1\",\"releaseName\":\"Release-1\",\"repoProvider\":\"GitHub\",\"repoName\":\"dave-fry/test-pacman-api\",\"collectionUrl\":\"https://dev.azure.com/IVCGroup/\",\"teamProject\":\"193886ae-efc1-4f3d-a9a5-52bb9f5e8b7b\",\"buildProjectUrl\":\"https://dev.azure.com/IVCGroup/193886ae-efc1-4f3d-a9a5-52bb9f5e8b7b\",\"repositoryUrl\":\"\",\"branch\":\"main\",\"teamProjectName\":\"playground\",\"slotName\":\"production\"}",
+                "start_time": "2024-04-15T10:33:33.6551946Z",
+                "end_time": "2024-04-15T10:33:33.827072Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/d0b1cb37f7de49f48b2281e42347c417')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "VSTS",
+                "message": "{\"type\":\"deployment\",\"commitId\":\"eec5dd5d4ab7f34aeba6d9305332920318e639d3\",\"buildId\":\"181159\",\"releaseId\":\"151\",\"buildNumber\":\"20240415.2\",\"releaseName\":\"Release-1\",\"repoProvider\":\"GitHub\",\"repoName\":\"dave-fry/test-pacman-api\",\"collectionUrl\":\"https://dev.azure.com/IVCGroup/\",\"teamProject\":\"193886ae-efc1-4f3d-a9a5-52bb9f5e8b7b\",\"buildProjectUrl\":\"https://dev.azure.com/IVCGroup/193886ae-efc1-4f3d-a9a5-52bb9f5e8b7b\",\"repositoryUrl\":\"\",\"branch\":\"main\",\"teamProjectName\":\"playground\",\"slotName\":\"production\"}",
+                "start_time": "2024-04-15T15:38:57.1450332Z",
+                "end_time": "2024-04-15T15:38:57.2856623Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2023-01-01",
+            "name": "[concat(parameters('sites_app_pacman_api_name'), '/', parameters('sites_app_pacman_api_name'), '.azurewebsites.net')]",
+            "location": "UK West",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_app_pacman_api_name'))]"
+            ],
+            "properties": {
+                "siteName": "app-pacman-api",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
+}
