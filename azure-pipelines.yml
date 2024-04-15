@@ -17,3 +17,11 @@ jobs:
 - job: Work
   steps:
   - bash: echo "The security-lib-ci pipeline runs first"
+  
+- job: A
+  steps:
+  - bash: echo "A"
+
+- job: B
+  steps:
+  - bash: echo "B"  
